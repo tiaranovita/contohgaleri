@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemrograman Web</title>
+  <style>
+    /* ====== HEADER ====== */
+    header {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+        /* Checkbox toggle */
+    .menu-checkbox {
+      display: none;
+    }
+
+    /* Tombol ☰ */
+    .menu-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      z-index: 1100; /* pastikan di atas header */
+      background: transparent;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #2c3e50;
+      overflow-x: hidden;
+      transition: 0.4s;
+      padding-top: 60px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar a {
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.3s;
+    }
+
+    .sidebar a img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar a:hover {
+      background-color: #0984e3;
+    }
+
+    .close-btn {
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      padding: 10px 25px;
+      margin-left: auto;
+    }
+
+    /* Checkbox aktif → sidebar muncul */
+    .menu-checkbox:checked ~ .sidebar {
+      width: 180px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    section {
+      background: white;
+      padding: 30px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    section:hover {
+      transform: translateY(-5px);
+    }
+
+    section h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      border-left: 6px solid #0984e3;
+      padding-left: 10px;
+    }
+
+
+    /* ====== ARTIKEL ====== */
+    .artikel {
+      background: #fff;
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .artikel h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      border-left: 6px solid #0984e3;
+      padding-left: 10px;
+    }
+
+    .artikel p {
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* ====== GALERI SECTION ====== */
+    .galeri-section {
+      background: #fff;
+      width: 90%;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .judul-galeri {
+      font-size: 22px;
+      font-weight: bold;
+      border-left: 6px solid #0984e3;
+      padding-left: 10px;
+      margin-bottom: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .galeri-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .galeri-grid a {
+      display: block;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .galeri-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .galeri-grid img:hover {
+      transform: scale(1.05);
+    }
+
+    /* ====== LIGHTBOX ====== */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox:target {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    /* Tombol navigasi lightbox */
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      font-size: 2rem;
+      color: white;
+      text-decoration: none;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 14px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+
+    .prev { left: 20px; }
+    .next { right: 20px; }
+
+    .prev:hover, .next:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    /* Tombol close */
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      text-decoration: none;
+    }
+
+       .contact-sidebar {
+    position: fixed;
+    top: 40%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 5px;
+    z-index: 1000;
+    }
+
+    .contact-sidebar a {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    padding: 8px;
+    display: block;
+    transition: transform 0.3s, background 0.3s;
+    }
+
+    .contact-sidebar a img {
+    width: 28px;
+    height: 28px;
+    display: block;
+    }
+
+    .contact-sidebar a:hover {
+    background: #0984e3;
+    transform: translateX(-5px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: #2c3e50;
+      color: white;
+      border-top-left-radius: 30% 15%;
+      border-top-right-radius: 30% 15%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Checkbox & Tombol ☰ -->
+  <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+  <label for="menu-toggle" class="menu-icon">☰</label>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <label for="menu-toggle" class="close-btn">×</label>
+    <a href="#home"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946433.png" alt="Home"> Home</a>
+    <a href="#galeri"><img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="Galeri"> Galeri</a>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Pemrograman Web</h1>
+  </header>
+
+  <!-- home -->
+  <section id="home">
+    <div class="container">
+      <h2>Pentingnya Pemrograman Web di Era Digital</h2>
+      <p>Pemrograman web merupakan salah satu keterampilan penting di era digital saat ini. Hampir semua sektor kehidupan terhubung dengan teknologi internet, mulai dari pendidikan, bisnis, pemerintahan, hingga hiburan. Dengan memahami pemrograman web, seseorang dapat membangun situs interaktif, informatif, dan fungsional untuk berbagai keperluan.</p>
+      <p>Melalui mata kuliah Pemrograman Web, mahasiswa dilatih untuk menguasai HTML, CSS, dan bahasa pemrograman lainnya yang mendukung pembuatan aplikasi web. Selain aspek teknis, mata kuliah ini juga mengajarkan cara berpikir logis, kreatif, dan terstruktur dalam menyelesaikan permasalahan melalui teknologi.</p>
+    </div>
+  </section>
+
+<!-- GALERI -->
+<section id="galeri">
+  <h2 class="judul-galeri">Galeri</h2>
+  <div class="galeri-grid">
+    <a href="#img1"><img src="https://tse1.mm.bing.net/th/id/OIP.u6I1IanINYW87P-c5n7BvgHaDc?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Galeri 1"></a>
+    <a href="#img2"><img src="https://tse3.mm.bing.net/th/id/OIP.9dJWv0NOjeN-KHOzxD7togHaDS?cb=12&w=3292&h=1459&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Galeri 2"></a>
+    <a href="#img3"><img src="https://creativemedia.id/wp-content/uploads/2020/01/Kursus-Pemrograman.jpg" alt="Galeri 3"></a>
+    <a href="#img4"><img src="https://www.anakteknik.co.id/property/24522/articles/1806/bahasa-pemrograman-terpopuler-1-1170x702.jpg" alt="Galeri 4"></a>
+    <a href="#img5"><img src="https://www.inboundav.com/hs-fs/hubfs/web-development.png?width=1134&height=620&name=web-development.png" alt="Galeri 5"></a>
+    <a href="#img6"><img src="https://onlinemarketinghome.com/wp-content/uploads/2023/02/web-development-reseller-program.jpg" alt="Galeri 6"></a>
+    <a href="#img7"><img src="https://miro.medium.com/v2/resize:fit:750/1*3T7J7csXY8u36acofw5N8g.jpeg" alt="Galeri 7"></a>
+    <a href="#img8"><img src="https://th.bing.com/th/id/OIP.CDX75lSybyjVBj6-DhacKAHaEJ?o=7&cb=12rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Galeri 8"></a>
+    <a href="#img9"><img src="https://www.industryconnect.org/wp-content/uploads/2023/04/career-software-dev.jpg" alt="Galeri 9"></a>
+    <a href="#img10"><img src="https://majapahit.id/thumbnail/2022/05/202205311147_Macam-Macam%20Bahasa%20Pemrograman%20dan%20Fungsinya.jpg" alt="Galeri 10"></a>
+    <a href="#img11"><img src="https://badoystudio.com/wp-content/uploads/2022/04/contoh-bahasa-pemrograman-Small.jpg" alt="Galeri 11"></a>
+    <a href="#img12"><img src="https://cdn.axalize.vn/media/content/thumbnails/Most-Popular-Programming-Languages-To_Learn.jpg" alt="Galeri 12"></a>
+  </div>
+</section>
+
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="img1">
+      <a href="#img12" class="prev">❮</a>
+      <img src="https://tse1.mm.bing.net/th/id/OIP.u6I1IanINYW87P-c5n7BvgHaDc?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" alt="">
+      <a href="#img2" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img2">
+      <a href="#img1" class="prev">❮</a>
+      <img src="https://tse3.mm.bing.net/th/id/OIP.9dJWv0NOjeN-KHOzxD7togHaDS?cb=12&w=3292&h=1459&rs=1&pid=ImgDetMain&o=7&rm=3" alt="">
+      <a href="#img3" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img3">
+    <a href="#img2" class="prev">❮</a>
+    <img src="https://creativemedia.id/wp-content/uploads/2020/01/Kursus-Pemrograman.jpg" alt="">
+    <a href="#img4" class="next">❯</a>
+    <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img4">
+    <a href="#img3" class="prev">❮</a>
+    <img src="https://www.anakteknik.co.id/property/24522/articles/1806/bahasa-pemrograman-terpopuler-1-1170x702.jpg" alt="">
+    <a href="#img5" class="next">❯</a>
+    <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img5">
+      <a href="#img4" class="prev">❮</a>
+        <img src="https://www.inboundav.com/hs-fs/hubfs/web-development.png?width=1134&height=620&name=web-development.png" alt="">
+      <a href="#img6" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img6">
+      <a href="#img5" class="prev">❮</a>
+        <img src="https://onlinemarketinghome.com/wp-content/uploads/2023/02/web-development-reseller-program.jpg" alt="">
+      <a href="#img7" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img7">
+      <a href="#img6" class="prev">❮</a>
+        <img src="https://miro.medium.com/v2/resize:fit:750/1*3T7J7csXY8u36acofw5N8g.jpeg" alt="">
+      <a href="#img8" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img8">
+      <a href="#img7" class="prev">❮</a>
+       <img src="https://th.bing.com/th/id/OIP.CDX75lSybyjVBj6-DhacKAHaEJ?o=7&cb=12rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" alt="">
+      <a href="#img9" class="next">❯</a>
+      <a href="#" class="close">✖</a>g
+    </div>
+
+    <div class="lightbox" id="img9">
+      <a href="#img8" class="prev">❮</a>
+        <img src="https://www.industryconnect.org/wp-content/uploads/2023/04/career-software-dev.jpg" alt="">
+      <a href="#img10" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+    <div class="lightbox" id="img10">
+      <a href="#img9" class="prev">❮</a>
+        <img src="https://majapahit.id/thumbnail/2022/05/202205311147_Macam-Macam%20Bahasa%20Pemrograman%20dan%20Fungsinya.jpg" alt="">
+      <a href="#img11" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img11">
+      <a href="#img10" class="prev">❮</a>
+        <img src="https://badoystudio.com/wp-content/uploads/2022/04/contoh-bahasa-pemrograman-Small.jpg" alt="">
+      <a href="#img12" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+
+    <div class="lightbox" id="img12">
+      <a href="#img11" class="prev">❮</a>
+        <img src="https://cdn.axalize.vn/media/content/thumbnails/Most-Popular-Programming-Languages-To_Learn.jpg" alt="">
+      <a href="#img1" class="next">❯</a>
+      <a href="#" class="close">✖</a>
+    </div>
+  </section>
+
+    <div class="contact-sidebar">
+  <a href="https://wa.me/6285760658312" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+  </a>
+  <a href="https://www.instagram.com/itsme_pcrrem?igsh=NmUxdTh2amh2dXY2" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+  </a>
+  <a href="https://www.tiktok.com/@itsme_yayaa040?is_from_webapp=1&sender_device=pc" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046127.png" alt="TikTok">
+  </a>
+</div>
+
+  <footer>
+    <p>&copy; 2025 Tiara - pemrograman web</p>
+  </footer>
+
+</body>
+</html>
